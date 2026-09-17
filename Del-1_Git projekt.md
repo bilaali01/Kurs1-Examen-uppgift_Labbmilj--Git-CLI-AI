@@ -255,12 +255,13 @@ ssh -T git@github.com #(Verfiera anslutningen)
 
 
 1. Du öppnar din projekt, ändrar skriver nått nytt code
-2. Du  vill nu spara alla dina nya ändringar
+2. Du  vill nu spara alla dina nya ändringar  
+3. **Detta anvädner du när du ska ladda upp hela mappen som, `git lever i`**. Det kan vara att du ändrade på alla fielrna (Bulk uppload).
 ```Bash
 git status   #(kollar vad som hände)
-git add .          #(git lägg till alla ändringar, snart ska allt sparas)
-git commit -m "Jag ändrade är.."  #(git spara allt nu och skriv ett meddelande “ändrade ..”)
-git push          #(Laddar up på github)
+git add .          #(git lägg i lådan alla ändringar i mappen som du är registerat i, snart ska allt sparas)
+git commit -m "Jag ändrade är fil2-VB f3-kommand... "  #(git spara allt nu och skriv ett meddelande “ändrade ..”)
+git push          #(git ladda up lådan på github)
 ```  
 
 **Tack För Din Tid**  
