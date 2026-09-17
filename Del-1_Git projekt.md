@@ -80,7 +80,7 @@ git commit -m "Jag ändrade är.."  #(git spara allt nu och skriv ett meddelande
 git log --oneline #(visar maintidlinje ID och medeladne på versionen du sparade.)
 ```  
 ***  
-### Steg 7: EXTREMT VIKTIGT FÖR SÄKERHET (`.gitignorer`).  
+### Steg 7:<span style="color: red; font-weight: bold;"> SUPER VIKTIGT</span> FÖR SÄKERHET (`.gitignorer`).  
 Vissa saker som `lösenord` och `API-nycklar` ska **absolut aldrig sparas** sådär eller komma ut på nätet.  
 Därför lägger vi ett spärr på vissa filtyper som `.env` så att git låtsas som att dom inte finns.  
 Den anpassas bara på den mapp/projekt du vill anpassa det på, (`skriver igen för varje projekt`)  
@@ -252,17 +252,27 @@ ssh -T git@github.com #(Verfiera anslutningen)
 ***  
 
 ### Steg 10: Daglig ändringar och uppladdningar till **[Github](https://github.com)**  
+> <span style="color: red; font-weight: bold;"> SUPER VIKTIGT:</span> När du har ändrat i filen, du måste spara den antigen `file > save` eller `CTRL + S`.  
 
-
-1. Du öppnar din projekt, ändrar skriver nått nytt code
-2. Du  vill nu spara alla dina nya ändringar  
+> **⬇️ Senario 1 ⬇️** : Laddar upp **alla** filer i mappen som `.git` lever i. ⬇️ 
+1. Du öppnar din projekt, ändrar skriver nått nytt code ( i olika filer )
+2. Du  vill nu spara alla dina nya ändringar i alla filerna  
 3. **Detta anvädner du när du ska ladda upp hela mappen som, `git lever i`**. Det kan vara att du ändrade på alla fielrna (Bulk uppload).
 ```Bash
 git status   #(kollar vad som hände)
-git add .          #(git lägg i lådan alla ändringar i mappen som du är registerat i, snart ska allt sparas)
-git commit -m "Jag ändrade är fil2-VB f3-kommand... "  #(git spara allt nu och skriv ett meddelande “ändrade ..”)
-git push          #(git ladda up lådan på github)
+git add .     #(git packa ner alla ändringar i mappen som du är registerat i, och lägg dom i lådan för snart ska allt sparas)
+git commit -m "Jag ändrade är fil2-VB f3-kommand... "  #(Döp lådan till ...)
+git push          #git lägg lådan i garaget(github), så att personer med rätt behörighet kan se innehåll. 
 ```  
+> **⬇️Senario 2 ⬇️** : Laddar upp **Specefik** fil av mappen som `.git` lever i. ⬇️
+
+**Vi säger att du har en mapp där det finns olika filer, `( milo.md & eko.md )` Du vill specefik ladda upp bara filen `milo.md` till [Github](https://github.com)**  
+```Bash  
+git add "milo.md" #packa ner denna filen i lådan, vi ska snart ladda upp det till gihub.  
+git status #filen milo.md ska visas med grönt text, det betyder att filen finns i lådan.  
+git commit -m "v2_ändrade..." #Döp lådan till ...  
+git push origin main #git lägg lådan i garaget(github), så att personer med rätt behörighet kan se innehåll.  
+``` 
 
 **Tack För Din Tid**  
 **Skriven av Bilal**
