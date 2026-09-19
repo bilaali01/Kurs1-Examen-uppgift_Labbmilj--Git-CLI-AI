@@ -1,0 +1,150 @@
+# **- *Del 4: AI-stöd  Kritisk Utvärdering (Kursmål 11)***  
+### **Skapa ett särskilt avsnitt i din dokumentation med rubriken AI-logg och Utvärdering:**  
+
+**1. Använd ett generativt AI-verktyg för att få hjälp med ett kommandoradskommando
+eller förklaring av en nätverks-/behörighetsfunktion.**  
+
+Jag ska anvädna `Germini (Googles Ai)` och ska be den förklara `ABAC`.
+Sen tar jag svaret från `Germini` och ber `Claude` kolla efter `hallucinationer`  
+
+
+**2. Dokumentera din exakta prompt samt AI-verktygets svar.**  
+
+```  
+Jag behöver din hjälp min fina vän. 
+Agera som en IT-tekniker med över 10år av erfarnhet.
+Jag kommer att ge dig ett ämne som du ska göra följande på..
+
+Viktigt: Förklara med lätt Svenska, kort och rakt in i saken, men försök få med så mycket kunskap som möjligt. 
+
+Ämnet är: Vad är ABAC och hur använder jag den, och vart finns den på min dator, är det linux eller windows, och hur aktiverar jag den. vilka hot har den? är de nyaste teknik? 
+
+Sen Ge mig en liten Quiz om den ämne så jag säkerheställer att jag fattat.
+
+VIKTIGT: om något du undrar så är det bara att ställa fråga till mig.
+```
+
+
+
+**3. Utför en kritisk granskning av svaret: Var koden/förklaringen korrekt? Fanns det
+några hallucinationer, föråldrade kommandon eller säkerhetsbrister? Redogör för hur
+du verifierade svaret.**  
+  
+
+```
+                                       ⬇️Nedan är svaret jag fick från Gemini⬇️
+```
+# ABAC – Snabbguide från fältet (10+ år i skyttegravarna)
+
+Tjena! Håll det tajt och förstå arkitekturen istället för att stirra på GUI-knappar. Kör hårt:
+
+## 1. Vad är ABAC?
+**ABAC (Attribute-Based Access Control)** är dynamisk åtkomstkontroll som utvärderar *flera variabler samtidigt* (attribut) istället för enbart statisk identitet/roll.
+* **Skillnad mot RBAC:** RBAC = *Vem är du?* (Admin). ABAC = *Vem är du, var är du, vad klockan är, och är laptopen krypterad?*
+* **Logikexempel:** `Om Användare.Roll == "Ekonomi" OCH Kontext.Plats == "Kontor" OCH Enhet.Krypterad == true => Tillåt`.
+
+## 2. Windows eller Linux? Vart finns den?
+* **Lokal sanning:** **Nej, finns inte lokalt** på din PC (Windows NTFS eller Linux `chmod`/ACL är DAC/MAC, inte ABAC).
+* **Var den finns:** I moln- och enterprise-lagret (Azure ABAC för blob-storage, AWS IAM `Condition`-block, Kubernetes med OPA/Gatekeeper, eller Zero Trust-gateways).
+* **Aktivering:** Du slår inte på en switch. Du *skriver policy-kod* (JSON/YAML/Rego) i din IAM/IDP-plattform som interceptar anrop.
+
+## 3. Vilka hot finns?
+* **Policy-helvetet:** När 50 villkor korsar varandra blir felsökning ett mörker (*"Vem blockerar mig, rollen, tiden eller käll-IP?"*).
+* **Attribut-spoofing/poisoning:** Om källan som levererar attribut (t.ex. MDM/IdP) komprometteras, fattar ABAC-motorn beslut på falsk grund.
+* **Prestanda-overhead:** Evaluering av regelytor per request kostar millisekunder.
+
+## 4. Är det nyaste tekniken?
+**Nej.** XACML-standarden kom för över 20 år sedan. Däremot är den *heta standarden* idag i **Zero Trust**, molnnativa microservices och modern Identity-federation (t.ex. Open Policy Agent).
+
+---
+
+## 🧠 Mini-quiz (Testa dig själv!)
+1. Kan du aktivera ABAC för en lokal mapp på Windows 11 via egenskaper? *(Ja/Nej)*
+2. Ge ett konkret attribut i en ABAC-regel som *inte* finns i ett rent RBAC-tänk.
+3. Vad är den största operativa risken när policyerna växer?
+
+*Svara med dina rader så rättar jag omedelbart!*  
+```  
+                    ⬇️⬇️Jag tog texten ovan och klistra in i `Claude` och fick detta svaret ⬇️⬇️
+```  
+# Granskning: ABAC-snabbguiden
+
+**Omdöme:** Grundidén stämmer och tonen är pedagogisk. Men det finns **ett rent sakfel** (att Windows saknar ABAC lokalt), och det felet sprider sig till quizets facit. Dessutom saknas **den viktigaste säkerhetsrisken i praktiken**, och texten tar på sig en påhittad auktoritet. Inga kommandon ges, så inga föråldrade kommandon finns. Men den tekniska precisionen brister på flera ställen.
+
+---
+
+## 1. Påstående för påstående
+
+| # | Påstående | Bedömning | Kommentar |
+|---|---|---|---|
+| 1 | ABAC = dynamisk kontroll över flera attribut | ✅ Korrekt | Stämmer med NIST SP 800-162. |
+| 2 | RBAC = "Vem är du?", ABAC = vem + var + när + enhet | ✅ Korrekt | Bra förenkling. Men RBAC ser egentligen på *vilken roll* du har, inte *vem* du är. |
+| 3 | Logikexemplet med Roll + Plats + Krypterad | ✅ Korrekt | Tydligt och bra. |
+| 4 | "Finns inte lokalt på din PC (Windows)" | ❌ **Fel** | Windows har haft **conditional ACEs** sedan Windows 7 / Server 2008 R2. Det är attributbaserade villkor direkt i NTFS-behörigheterna, och i domäner byggs **Dynamic Access Control** (Server 2012) på samma mekanism med user claims, device claims och resursegenskaper. Det *är* ABAC på filnivå. |
+| 5 | "NTFS/chmod/ACL är DAC/MAC" | ⚠️ Förenklat | chmod och ACL är DAC. MAC finns i form av SELinux/AppArmor på Linux och Mandatory Integrity Control på Windows. Texten klumpar ihop dem. Förkortningen **DAC** krockar också med Microsofts *Dynamic* Access Control, som ju just är ABAC. Det förvirrar en nybörjare. |
+| 6 | Azure ABAC för blob, AWS `Condition`, OPA/Gatekeeper | ✅ Korrekt | Alla exemplen stämmer. |
+| 7 | "Du slår inte på en switch, du skriver policy-kod" | ⚠️ Överdrivet | Azure-villkor kan byggas i portalens grafiska condition editor, och AWS ABAC bygger främst på **taggar** och JSON-policyer. Azure-villkor är dessutom ett eget uttrycksspråk, inte JSON/YAML/Rego. |
+| 8 | "IAM/IDP-plattform som interceptar anrop" | ⚠️ Arkitektoniskt slarvigt | Det är **PEP** (Policy Enforcement Point) som fångar anropet och **PDP** som fattar beslutet. En IdP levererar attribut, alltså en **PIP**-roll. En text som vill lära ut "arkitekturen" borde nämna PEP/PDP/PIP/PAP. |
+| 9 | Hot: policy-komplexitet, attribut-poisoning, prestanda | ⚠️ Ofullständigt | Det som står är rimligt, men operativa risker och egentliga hot blandas ihop. Se avsnitt 2. |
+| 10 | "Evaluering kostar millisekunder" | ⚠️ Beror på | Lokal evaluering (t.ex. en inbäddad OPA) tar ofta mikrosekunder. Det är nätverksanrop till en central PDP som kostar millisekunder. |
+| 11 | XACML kom för över 20 år sedan | ✅ Korrekt | XACML 1.0 blev OASIS-standard 2003. |
+| 12 | OPA som "den heta standarden" | ⚠️ Fel ordval | OPA är ett **CNCF-projekt**, inte en standard. Den faktiska nya standarden är **OpenID AuthZEN Authorization API 1.0**, som nu är godkänd som Final Specification. Den nämns inte alls. |
+
+---
+
+## 2. Säkerhetsbrister i själva råden
+
+- **Den största luckan är att användare kan ändra sina egna attribut.** I AWS ABAC är taggar själva attributen. Om en användare har `iam:TagRole`/`TagResource` utan begränsning kan hen ge sig själv rätt tagg och därmed eskalera sina rättigheter. AWS rekommenderar att styra vem som får sätta taggar med villkor som `aws:TagKeys`/`aws:RequestTag`. Det här är den vanligaste verkliga ABAC-bristen och den saknas helt.
+- **Fail-open när attribut saknas.** Vad händer om MDM-attributet `Krypterad` inte går att hämta? En policy som inte uttryckligen nekar blir en lucka.
+- **Inaktuella attribut.** Attribut kan vara cachade eller föråldrade, till exempel en uppsagd person som fortfarande har `Avdelning=Ekonomi`.
+- **Plats-attributet i exemplet går att förfalska** om det bygger på IP-adress, till exempel med VPN eller proxy. Det borde nämnas eftersom texten själv använder plats som exempel.
+
+---
+
+## 3. "Hallucinationer" och ton
+
+- **"10+ år i skyttegravarna"** är en påhittad identitet. En AI har ingen fälterfarenhet. Formuleringen lånar auktoritet den inte har, och det gör läsaren mindre benägen att ifrågasätta just de fel som listas ovan.
+- Utöver det finns inga uppdiktade produkter eller API:er. Felen handlar om **överförenkling som blivit felaktig**, inte om rena påhitt.
+
+---
+
+## 4. Quizet
+
+| Fråga | Problem |
+|---|---|
+| 1. ABAC på lokal mapp i Windows 11 via Egenskaper? | Det förväntade svaret "Nej" är **fel eller i bästa fall missvisande**. Under Egenskaper → Säkerhet → Avancerat → en behörighetspost finns **"Lägg till ett villkor"**, som skapar en conditional ACE. Lokalt, utan domän, är villkoren begränsade till gruppmedlemskap och liknande. Full ABAC med claims kräver AD och DAC. Rätt svar: *"Delvis. Villkorsmekanismen finns, men full ABAC kräver domän."* |
+| 2. Ge ett attribut som inte finns i RBAC | ✅ Bra fråga. |
+| 3. Största operativa risken? | ✅ Bra, men facit borde inkludera attribut-governance, inte bara policy-sprawl. |
+
+---
+
+## 5. Hur jag verifierade
+
+1. **Egen kunskap mot primärkällor:** NIST SP 800-162 (ABAC-definitionen och modellen med PEP/PDP/PIP/PAP), OASIS XACML-historiken och Microsofts dokumentation om conditional ACEs.
+2. **Webbsökning** på de tre punkter där ett fel skulle väga tyngst:
+   - Windows conditional ACEs och DAC. Bekräftat via Microsoft Learn (`AddConditionalAce`, SDDL för conditional ACEs, DAC-översikten).
+   - Status för AuthZEN. Bekräftat att Authorization API 1.0 är godkänd som Final Specification.
+   - Risken med taggar i AWS ABAC. Bekräftat via AWS-dokumentation och NCC Groups genomgång.
+3. **Det jag inte verifierade:** Jag har inte testat dialogrutan i Windows 11 praktiskt, eftersom datorn inte styrdes under granskningen. Påståendet om "Lägg till ett villkor" lokalt bygger på dokumentationen och känt beteende, inte på ett eget test.
+
+---
+
+## Källor
+
+- [Microsoft Learn – AddConditionalAce (winbase.h)](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-addconditionalace)
+- [Microsoft Learn – SDDL for Conditional ACEs](https://learn.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-definition-language-for-conditional-aces-)
+- [Microsoft Learn – Dynamic Access Control Overview](https://learn.microsoft.com/ru-ru/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn408191(v=ws.11))
+- [OpenID Foundation – Authorization API 1.0 Final Specification Approved](https://openid.net/authorization-api-1-0-final-specification-approved/)
+- [OpenID – AuthZEN Working Group](https://openid.net/wg/authzen/)
+- [AWS IAM – ABAC tutorial](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_attribute-based-access-control.html)
+- [AWS re:Post – IAM tag-based restriction policies](https://repost.aws/knowledge-center/iam-tag-based-restriction-policies)
+- [NCC Group – Introduction to AWS ABAC](https://www.nccgroup.com/research-blog/introduction-to-aws-attribute-based-access-control/)
+- NIST SP 800-162, *Guide to Attribute Based Access Control (ABAC) Definition and Considerations* (2014)
+
+```  
+Jag kan hålla på fram och tillbaka mellan `Claude` och `Gemini` då tillslut får man en riktigt bra svar förmodligen utan hallucinationer.  
+
+Det jag tänker på att `Claude` och `Gemini` har sina 2 olika databaser LLM, med olika info i så därför kan det bli att dom inte kommer överens om en sak.  för dom måste först kommnucera. 
+```
+**Tack För Din Tid**  
+**Skriven av Bilal**

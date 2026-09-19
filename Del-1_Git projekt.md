@@ -268,7 +268,8 @@ git push          #git lägg lådan i garaget(github), så att personer med rät
 
 **Vi säger att du har en mapp där det finns olika filer, `( milo.md & eko.md )` Du vill specefik ladda upp bara filen `milo.md` till [Github](https://github.com)**  
 ```Bash  
-git add "milo.md" #packa ner denna filen i lådan, vi ska snart ladda upp det till gihub.  
+git add "milo.md" #packa ner denna filen i lådan, vi ska snart ladda upp det till gihub.
+git add "milo.md" image*.png #VIKTIGT:Detta endast om du har bilder i filen och du vill packa dom i lådan (ut till github)  
 git status #filen milo.md ska visas med grönt text, det betyder att filen finns i lådan.  
 git commit -m "v2_ändrade..." #Döp lådan till ...  
 git push origin main #git lägg lådan i garaget(github), så att personer med rätt behörighet kan se innehåll.  
