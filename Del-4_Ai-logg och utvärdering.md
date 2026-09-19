@@ -148,3 +148,5 @@ Det jag tänker på att `Claude` och `Gemini` har sina 2 olika databaser LLM, me
 ```
 **Tack För Din Tid**  
 **Skriven av Bilal**
+
+

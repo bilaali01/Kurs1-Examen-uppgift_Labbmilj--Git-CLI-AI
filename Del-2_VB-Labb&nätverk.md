@@ -76,7 +76,7 @@ Välj `.iso` utifrån vilken CPU du har i din HOST. Titta nedan⬇️.
 
 Öppnade **[Oracle VirtualBox](https://www.virtualbox.org/)** > New > VM Name: Serv1-unbuntu > ISO image [Ubuntu-Server](https://ubuntu.com/download/server#how-to-install-tab-lts) > 4-Gb Ram > 3 cores > Disk size 25-GB > 
 
-![alt text](image.png)  
+![alt text](Bilder/image.png)  
 Jag har fått problem, som du ser det har hängt sig (flera gånger).  
 Efter lite felsökning visade det sig att en grön sköldpadda tyder på att system är långsam, det kan bero på att Windows vill att vi använder Windows tjänster istället 😑.  
 Det jag ska göra är att byta `Hypervisor` till (**[Hyper-V](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/install-hyper-v?tabs=powershell&pivots=windows)**) få hoppas att det löser sig.😑
@@ -94,9 +94,9 @@ Efter lite strul för jag är inte van vid **[Hyper-V](https://learn.microsoft.c
 - Jag stänger ner `Secure boot` eftersom **Hyper-V med Gen2** vägrar att boota den. `Secure boot` finns före att man bootar enheten, eftersom den letar i filerna efter nån `virus` innan man botar maskinen. Förmodlingen tror `Secure boot` att `.iso` filen innehåller nått okänt därför bootas den inte.  
 
 
-![serv1-ubuntu](image-5.png).
+![serv1-ubuntu](Bilder/image-5.png).
 
-![serv1-ubuntu cli](image-10.png)
+![serv1-ubuntu cli](Bilder/image-10.png)
 
 Okej det gick äntligen efter all strul att jag öppnar en Ubuntu server 😁 så stolt.  
 Det första jag la till märke att i **/serv1** när man kör `ls` då ser man inte filer som `/bilder` man kan endast se dolda filer med hjälp av `ls -a`.
@@ -108,7 +108,7 @@ Det första jag la till märke att i **/serv1** när man kör `ls` då ser man i
 - `TPM-chippet` finns för att lagra säkert `våra nycklar, Pinkod, lösenord.` chippet är helt isolerat från resten av datorn. försöker man bryta in sig i den då låser den sig helt (nästan omöjlig att öppna igen).  
 
 
-![TPM chippet](image-9.png)
+![TPM chippet](Bilder/image-9.png)
 
 
 **Nu har jag min [Ubuntu-Server](https://ubuntu.com/download/server#how-to-install-tab-lts) `serv1-ubuntu` + och min **[Windows 11](https://www.microsoft.com/en-us/software-download/windows11)**-klien `win11-vm1` som ligger på **[Hyper-V](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/install-hyper-v?tabs=powershell&pivots=windows)****  
@@ -118,18 +118,18 @@ Det första jag la till märke att i **/serv1** när man kör `ls` då ser man i
 ms-cxh:localonly
 ```  
 
-![alt text](image-7.png)  
+![alt text](Bilder/image-7.png)  
 
 
 
-![alt text](image-8.png)
+![alt text](Bilder/image-8.png)
 ***  
 
 > **Del 3. Placera båda maskinerna på ett gemensamt internt nätverk (`Internal Network`) så att de kan kommunicera med varandra.**
 
 - Jag började med att starta mina [Ubuntu-Server](https://ubuntu.com/download/server#how-to-install-tab-lts) `serv1-ubuntu` + och min **[Windows 11](https://www.microsoft.com/en-us/software-download/windows11)**-klien `win11-vm1` som ligger på **[Hyper-V](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/install-hyper-v?tabs=powershell&pivots=windows)** och pinga 8.8.8.8 (Google) för att se om det är kopplade till `WAN` eller inte.(både är kopplade till internet)  
 
-![alt text](image-11.png)  
+![alt text](Bilder/image-11.png)  
 
 <span style="color: red; font-weight: bold;">VIKTIGT:</span>  
 **Just nu har vi : **Externel** : `win11-vm1`+ `serv1-ubuntu` + `WAN` ser varandra genom min `Host` som funkar som `Default Switch` nedan bättre förklraing.**  
@@ -140,14 +140,14 @@ Du kan se att dina `Viretuell Maskin(VM)` har ett annat **default gateway** än 
 ### För att göra detta ska vi...  
 **1. Vi ska ha bara en kabel som är dragen från `win11-vm1`eth1 till `serv1-ubuntu` eth1 . Med andra ord skpa `Internal Network` så att våra maskiner ser bara varandra**. **[Virtual Switch Explained: External, Internal & Private](https://www.youtube.com/watch?v=1d640MhTsqc)**. 
 
-![alt text](image-12.png)  
+![alt text](Bilder/image-12.png)  
 
     
 
 **[Hyper-V](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/install-hyper-v?tabs=powershell&pivots=windows) > `Virtual Switch Manager` > `Internal netwok` > `Create Virtual Switch` och döpte den till `internal Virtual Switch bilal`**⬇️  
  
 
-![alt text](image-13.png)
+![alt text](Bilder/image-13.png)
 
 
 
@@ -183,8 +183,8 @@ Du kan se att dina `Viretuell Maskin(VM)` har ett annat **default gateway** än 
 
 **Setting på `win11-vm1` och `serv1-ubuntu` > `Network Adapter` > ändrade från `Default Switch` till `internal Virtual Switch bilal`⬇️⬇️**  
 
-![win11-vm1](image-17.png)
-![serv1-ubuntu](image-16.png)  
+![win11-vm1](Bilder/image-17.png)
+![serv1-ubuntu](Bilder/image-16.png)  
 
 
 
@@ -219,7 +219,7 @@ Du kan se att dina `Viretuell Maskin(VM)` har ett annat **default gateway** än 
 
 **Jag startade startade (`win11-vm1 och serv1-ubuntu`) pingade till 8.8.8.8 (Google.com) INGTE Svar = kan inte komma ut på internet.**⬇️  
 
-![Ping och ip](image-18.png)  
+![Ping och ip](Bilder/image-18.png)  
 
 
 ***  
@@ -229,7 +229,7 @@ Du kan se att dina `Viretuell Maskin(VM)` har ett annat **default gateway** än 
 **2. Vi ska tilldela statiskt ip addresser till `win11-vm1`(192.168.1.50) och `serv1-ubuntu` (192.168.1.51) så att DHCP inte byter addressen varje gång man bootar enheten.**  
 
 **`win11-vm1` > settings > Network & Internet > Advanced network settings > More adapter options `Edit` > Öppna (TCP/IPv4) > use the following ip address >`192.168.1.50 255.255.255.0`(Default gateway behövs inte eftersom dom är i sammma näverk).**
-![alt text](image-20.png)
+![alt text](Bilder/image-20.png)
 
 
 
@@ -247,11 +247,11 @@ Du kan se att dina `Viretuell Maskin(VM)` har ett annat **default gateway** än 
 
 **`serv1-ubuntu` > `cd /etc/netplan` > `ls` visar filen med nätverk som heter `00-installer-config.yaml` > `sudo nano 00-installer-config.yaml` > la till `addresses` och skrev ip `192.168.1.51` addressen som du ser i bilden..**⬇️
 
-![alt text](image-23.png)
+![alt text](Bilder/image-23.png)
 
-![alt text](image-21.png)
+![alt text](Bilder/image-21.png)
 
-![alt text](image-24.png)
+![alt text](Bilder/image-24.png)
 
 
 <span style="color: red; font-weight: bold;">VIKTIGT:</span>  
@@ -268,25 +268,26 @@ När `192.168.1.51 serv1-ubuntu` pingar (skicakar ut fråga) till `192.168.1.50 
 Regel säger: Släpp förbi `File & Printer Sharing` Via ICMPv4 alltså ping, `In` trafik in till `win11-vm1`.
 
 
-![alt text](image-26.png)
+![alt text](Bilder/image-26.png)
 
 
-![alt text](image-25.png)
+![alt text](Bilder/image-25.png)
 
 
 **Såhär sista test visar att mina vm (`win11-vm1 och serv1-ubuntu`) kan se (pinga) varandra. Testet visade oackså att (`win11-vm1 och serv1-ubuntu`) kan INTE se (WAN) eftersom (`win11-vm1 och serv1-ubuntu`) pingade till 8.8.8.8 (Google.com)och inget svar där.**  
 
 
-![alt text](image-28.png)
+![alt text](Bilder/image-28.png)
 ***
 
 
 > **Del 5. Dokumentera miljön strukturerat i en tabell som innehåller: Hostname,Operativsystem, IP-adress, Subnätmask och Standard Gateway.**  
 
-![tabllen](image-27.png)
+![tabllen](Bilder/image-27.png)
 
 
 
 
 
-
+**Tack För Din Tid**  
+**Skriven av Bilal**

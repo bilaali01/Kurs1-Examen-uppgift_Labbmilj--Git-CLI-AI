@@ -62,7 +62,7 @@ skola1-ubuntu:/var/systementor$
 
 **5. Verifiera nätverksanslutningen till Windows-VM:en med ping samt visa
 nätverkskortets detaljer (ip addr show).**  
-![alt text](image-29.png)
+![alt text](Bilder/image-29.png)
 
 ***  
 ***  
@@ -81,13 +81,14 @@ c:\>mkdir -p systementor\konsultData
 **2. Inspektera och dokumentera behörighetsstrukturen/ACL för mappen via
 PowerShell (Get-Acl).**  
 
-![alt text](image-30.png)
+![alt text](Bilder/image-30.png)
 
 **3. Verifiera nätverksanslutningen till Linux-VM:en (Test-Connection eller ping)
 och inspektera nätverksinställningarna (ipconfig /all).**  
 
-![alt text](image-31.png)  
+![alt text](Bilder/image-31.png)  
 
 
 **Tack För Din Tid**  
 **Skriven av Bilal**
+
