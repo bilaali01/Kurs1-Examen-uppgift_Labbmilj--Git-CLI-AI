@@ -71,7 +71,11 @@ code .    #(Öppnar VS-Code direkt från terminalen.)
 ```Bash
 git init      #(nu finns git i mapp som heter bilalgit)
 
-git status    #(Kontrollera att git kom in i mapp bilalgit)
+git status    #(Kontrollera att git kom in i mapp bilalgit)  
+
+git remote add origin git@github.com:[github-userN]/[repo-namnet] #öppna din repo och kopiera länken, välj sista 2 fält.  
+
+git push --set-upstream origin main #skapar koppligen mellan din lokala main och githubs main.
 
 git add .     #(git lägg till alla ändringar, snart ska allt sparas)  
 
